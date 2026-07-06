@@ -1,0 +1,32 @@
+id: apache-solr-admin-unauth
+
+info:
+  name: Apache Solr Admin - Unauthenticated Access
+  author: Th3l0newolf
+  severity: medium
+  description: |
+    Apache Solr Admin interface is accessible without authentication.
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cwe-id: CWE-306
+  metadata:
+    max-request: 1
+    verified: true
+    shodan-query: http.title:"Solr Admin"
+  tags: apache,solr,admin,unauth,misconfig
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/solr"
+
+    redirects: true
+    max-redirects: 3
+
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200'
+          - 'contains(body, "Solr Admin")'
+          - 'contains(body, "Solr Query Syntax")'
+        condition: and
